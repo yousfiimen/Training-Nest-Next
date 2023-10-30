@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 
 @Controller('tasks')
@@ -11,8 +11,8 @@ create(@Body() body) {
 }
 
 @Get()
-findTasks(@Body() body) {
-    return this.tasksService.findTasks(body);
+findTasks(@Query() query) {
+    return this.tasksService.findTasks(query);
 }
 
 
