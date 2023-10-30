@@ -5,13 +5,17 @@ import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({
-    envFilePath: ['.env.development.local', '.env.development'],
-    isGlobal: true,
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath:
+        process.env.NODE_ENV === 'production'
+          ? '.env.production'
+          : '.env.development',
+      isGlobal: true,
+    }),
+    UserModule,
+  ],
 
-  }), UserModule],
-  controllers: [AppController],
   providers: [AppService],
-
 })
-export class AppModule {}
+export class AppModule { }
