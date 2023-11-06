@@ -1,31 +1,35 @@
 import { Injectable, Query } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
+import { Task } from './interfaces/task.interface';
+
+
 
 @Injectable()
 export class TasksService {
-private tasks = [];
+private tasks: Task [] = [];
 
     create(body) {
         const task = {
             id:uuidv4(),
             ...body
         }
-        return this.tasks.push(task);
+        this.tasks.push(task)
+        return task as Task;
     }
    
-    findTasks(query) {
+   async findTasks(query): Promise<Task[]> {
         if(Object.keys(query).length > 0 ) {
-            const { name } = query;
-            if(name) {
-                return this.tasks.filter((task) => task.name.includes(name));
+            const { title } = query;
+            if(title) {
+                return this.tasks.filter((task) => task.title.includes(title));
             }
         }
-        return this.tasks;
-    }
+        return await this.tasks;
+    } 
     
 
-    findTask(params) {
-        return this.tasks.filter((task)=> task.id === params.id);
+     async findTask(params): Promise<Task> {
+        return this.tasks.find((task)=> task.id === params.id);
     }
     
 
@@ -35,7 +39,10 @@ private tasks = [];
     
 
     deleteTask(params) {
-        return params;
+        const task = this.findTask(params);
+
+        return this.tasks.filter((task) => task.id != params.id
+        );
     }
 
 }
