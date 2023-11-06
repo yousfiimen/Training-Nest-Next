@@ -1,4 +1,4 @@
-import { Injectable, Query } from '@nestjs/common';
+import { Injectable, NotFoundException, Query } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { Task } from './interfaces/task.interface';
 
@@ -29,19 +29,24 @@ private tasks: Task [] = [];
     
 
      async findTask(params): Promise<Task> {
-        return this.tasks.find((task)=> task.id === params.id);
+        const task = this.tasks.find((task)=> task.id === params.id);
+        if (!task) {
+            throw new NotFoundException("Task not found...");
+        }
+        return task;
     }
     
 
-    updateTask(params, body) {
-        return {...params, body};
+    async updateTask(id, body) {
+        const task = await this.findTask(id);
+        return {...id, body};
     }
     
 
-    deleteTask(params) {
-        const task = this.findTask(params);
+    async deleteTask(id) {
+        const task = await this.findTask(id);
 
-        return this.tasks.filter((task) => task.id != params.id
+        return this.tasks.filter((task) => task.id != task.id
         );
     }
 
