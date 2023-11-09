@@ -46,9 +46,7 @@ private tasks: Task [] = [];
 
     async deleteTask(id) {
         const task = await this.findTask(id);
-
-        return this.tasks.filter((task) => task.id != task.id
-        );
+        return this.tasks.filter((task) => task.id != task.id);
     }
 
 }

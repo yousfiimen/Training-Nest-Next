@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, U
 import { TasksService } from './tasks.service';
 import { CreateTaskDTO, createTaskSchema } from './dto/create-task.dto';
 import { ZodValidationPipe } from 'src/lib/zod/zod.pipe';
+import { updateTaskDTO, updateTaskSchema } from './dto/update-task.dto';
 
 @Controller('tasks')
 export class TasksController {
@@ -19,19 +20,19 @@ findTasks(@Query() query) {
 
 
 @Get(':id')
-findTask(@Param('id', ParseIntPipe) id) {
+findTask(@Param('id') id) {
     return this.tasksService.findTask(id);
 }
 
 
 @Put(':id')
-updateTask(@Param() params, @Body() body) {
-    return this.tasksService.updateTask(params, body);
+updateTask(@Param('id') id, @Body(new ZodValidationPipe(updateTaskSchema)) body: updateTaskDTO) {
+    return this.tasksService.updateTask(id, body);
 }
 
 @Delete(':id')
-deleteTask(@Param() params) {
-    return this.tasksService.deleteTask(params);
+deleteTask(@Param('id') id) {
+    return this.tasksService.deleteTask(id);
 }
 
 
