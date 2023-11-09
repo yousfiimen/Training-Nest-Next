@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, Query } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException, Query } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { Task } from './interfaces/task.interface';
 
@@ -28,10 +28,11 @@ private tasks: Task [] = [];
     } 
     
 
-     async findTask(params): Promise<Task> {
-        const task = this.tasks.find((task)=> task.id === params.id);
+     async findTask(id): Promise<Task> {
+        const task = this.tasks.find((task)=> task.id === id);
         if (!task) {
-            throw new NotFoundException("Task not found...");
+            //throw new NotFoundException("Task not found...");
+            throw new HttpException("Task not found...", HttpStatus.CONFLICT)
         }
         return task;
     }

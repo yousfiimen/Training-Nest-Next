@@ -1,12 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UsePipes } from '@nestjs/common';
 import { TasksService } from './tasks.service';
+import { CreateTaskDTO, createTaskSchema } from './dto/create-task.dto';
+import { ZodValidationPipe } from 'src/lib/zod/zod.pipe';
 
 @Controller('tasks')
 export class TasksController {
 constructor(private tasksService: TasksService) {}
 
 @Post()
-create(@Body() body) {
+@UsePipes(new ZodValidationPipe(createTaskSchema))
+create(@Body() body: CreateTaskDTO) {
     return this.tasksService.create(body);
 }
 
@@ -17,8 +20,8 @@ findTasks(@Query() query) {
 
 
 @Get(':id')
-findTask(@Param() params) {
-    return this.tasksService.findTask(params);
+findTask(@Param('id', ParseIntPipe) id) {
+    return this.tasksService.findTask(id);
 }
 
 
