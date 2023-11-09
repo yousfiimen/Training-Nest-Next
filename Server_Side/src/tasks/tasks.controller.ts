@@ -8,8 +8,7 @@ export class TasksController {
 constructor(private tasksService: TasksService) {}
 
 @Post()
-@UsePipes(new ZodValidationPipe(createTaskSchema))
-create(@Body() body: CreateTaskDTO) {
+create(@Body(new ZodValidationPipe(createTaskSchema)) body: CreateTaskDTO) {
     return this.tasksService.create(body);
 }
 
