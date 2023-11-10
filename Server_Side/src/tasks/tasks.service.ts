@@ -1,52 +1,88 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException, Query } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
-import { Task } from './interfaces/task.interface';
+
+import { PrismaService } from 'src/lib/prisma.service';
+import { Task } from '@prisma/client';
 
 
 
 @Injectable()
 export class TasksService {
+    constructor(private PrismaService: PrismaService) {}
 private tasks: Task [] = [];
 
-    create(body) {
-        const task = {
-            id:uuidv4(),
-            ...body
-        }
-        this.tasks.push(task)
-        return task as Task;
+ async   create(body) {
+    const data = await this.PrismaService.task.create({
+         data: {
+            title: body.title,
+            description: body.description
+         }
+        })
+      return data;
     }
    
    async findTasks(query): Promise<Task[]> {
         if(Object.keys(query).length > 0 ) {
             const { title } = query;
             if(title) {
-                return this.tasks.filter((task) => task.title.includes(title));
+            const data = await this.PrismaService.task.findMany({
+            where: {
+                title: {
+                    contains: title,
+                }
+            }
+        });
+
+                return data;
             }
         }
-        return await this.tasks;
+        const data = await this.PrismaService.task.findMany();
+        return data;
     } 
     
 
      async findTask(id): Promise<Task> {
-        const task = this.tasks.find((task)=> task.id === id);
-        if (!task) {
-            //throw new NotFoundException("Task not found...");
-            throw new HttpException("Task not found...", HttpStatus.CONFLICT)
+        const data = await this.PrismaService.task.findFirst({
+            where: {
+                id: id
+            }
+        })
+        if(!data) {
+            throw new NotFoundException("Task not found...");
         }
-        return task;
+        return data
+        // const task = this.tasks.find((task)=> task.id === id);
+        // if (!task) {
+        //     //throw new NotFoundException("Task not found...");
+        //     throw new HttpException("Task not found...", HttpStatus.NOT_FOUND)
+        // }
+        // return task;
     }
     
 
     async updateTask(id, body) {
         const task = await this.findTask(id);
-        return {...id, body};
+        const data = await this.PrismaService.task.update({
+            where: {
+                id: task.id,
+            },
+            data: {
+                title: body.title,
+                description: body.description
+            }
+        })
+        return data;
     }
     
 
     async deleteTask(id) {
         const task = await this.findTask(id);
-        return this.tasks.filter((task) => task.id != task.id);
+        // return this.tasks.filter((task) => task.id != task.id);
+        return await this.PrismaService.task.delete({
+            where: {
+                id: task.id
+            }
+        })
     }
 
 }

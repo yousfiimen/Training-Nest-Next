@@ -20,18 +20,18 @@ findTasks(@Query() query) {
 
 
 @Get(':id')
-findTask(@Param('id') id) {
+findTask(@Param('id', ParseIntPipe) id) {
     return this.tasksService.findTask(id);
 }
 
 
 @Put(':id')
-updateTask(@Param('id') id, @Body(new ZodValidationPipe(updateTaskSchema)) body: updateTaskDTO) {
+updateTask(@Param('id', ParseIntPipe) id, @Body(new ZodValidationPipe(updateTaskSchema)) body: updateTaskDTO) {
     return this.tasksService.updateTask(id, body);
 }
 
 @Delete(':id')
-deleteTask(@Param('id') id) {
+deleteTask(@Param('id', ParseIntPipe) id) {
     return this.tasksService.deleteTask(id);
 }
 
