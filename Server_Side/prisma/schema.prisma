@@ -15,5 +15,12 @@ model Task {
   title       String
   description String
   createdAt   DateTime @default(now())
+  status Status
   updatedAt   DateTime @updatedAt
+
+  // attributeObtionnel String?  : le ? pour dire obtionnel, @default('...'): valeur par defaut
+}
+enum Status {
+  IN_PROGRESS
+  DONE
 }
