@@ -15,7 +15,7 @@ import {
 export default function Navbar() {
   return (
     <NavigationMenu className="flex items-start justify-between">
-      <NavigationMenuList>
+      {/* <NavigationMenuList>
         <NavigationMenuItem>
           <Link href="/" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
@@ -31,8 +31,8 @@ export default function Navbar() {
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
-        </NavigationMenuList>
-        
+        </NavigationMenuList> */}
+    <div className="fixed right-0">
         <NavigationMenuList>
         <NavigationMenuItem>
           <Link href="/login" legacyBehavior passHref>
@@ -50,8 +50,8 @@ export default function Navbar() {
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
-
       </NavigationMenuList>
+</div>
     </NavigationMenu>
   )
 }
