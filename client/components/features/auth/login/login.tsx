@@ -79,7 +79,7 @@ export default function registerForm({}: IregisterForm) {
                     />
 
                     <div className="my-3 float-right">
-                      <Button type="submit">Submit</Button>
+                      <Button type="submit" size={"lg"}>Submit</Button>
                     </div>
                   </form>
                 </Form>

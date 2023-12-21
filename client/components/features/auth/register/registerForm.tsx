@@ -14,9 +14,12 @@ import loginLottie from "@/assets/login.json";
 import { registerValues, registerSchema } from "@/types/registerSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 interface IregisterForm {}
 
 export default function registerForm({}: IregisterForm) {
+  const [loading, setLoading] = useState<boolean>(false);
+
   const form = useForm<registerValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -27,8 +30,16 @@ export default function registerForm({}: IregisterForm) {
       birthday: "",
     },
   });
-  const onSubmitHandler = (values: registerValues) => {
-    console.log(values);
+  async function onSubmitHandler  (values: registerValues) {
+    const res = await fetch('https://api.example.com/...')
+
+   
+    if (!res.ok) {
+      // This will activate the closest `error.js` Error Boundary
+      throw new Error('Failed to fetch data')
+    }
+   
+    return console.log(res.json());
   };
 
   return (
@@ -129,7 +140,9 @@ export default function registerForm({}: IregisterForm) {
                     />
 
                     <div className="my-3 float-right">
-                      <Button type="submit">Submit</Button>
+                      <Button type="submit" loading={loading}>
+                        Submit
+                      </Button>
                     </div>
                   </form>
                 </Form>

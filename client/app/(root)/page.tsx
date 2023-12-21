@@ -1,7 +1,17 @@
-import Image from 'next/image'
+
+import Content from '@/components/content'
+
+import Footer from '@/components/footer'
+
+import '@/styles/globals.css'
 
 export default function Home() {
   return (
-    <main></main>
+    // <main></main>
+    <div>
+      <Content />
+
+      <Footer />
+    </div>
   )
 }
